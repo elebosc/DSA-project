@@ -101,6 +101,8 @@ void enqueue(QueueStruct* qs, CellCoords coords) {
 
 	if (is_queue_full(qs)) {
 		resize_queue(qs);
+	} else if (is_queue_empty(qs)) {
+		qs->head = 0;
 	}
 
 	qs->tail = (qs->tail + 1) % qs->size;
@@ -115,9 +117,14 @@ CellCoords dequeue(QueueStruct* qs) {
 	CellCoords coords;
 
 	coords = qs->queue[qs->head];
-	qs->head = (qs->head + 1) % qs->size;
 	(qs->n_elem)--;
-
+	if (qs->n_elem != 0) {
+		qs->head = (qs->head + 1) % qs->size;
+	} else {
+		qs->head = -1;
+		qs->tail = -1;
+	}
+	
 	return coords;
 }
 
